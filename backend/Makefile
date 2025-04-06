@@ -1,4 +1,4 @@
-.PHONY: all build run clean proto client run-all
+.PHONY: all build run clean proto client run-all test-http
 
 # Default target
 all: proto build run
@@ -57,7 +57,22 @@ deps:
 # Test the HTTP endpoint
 test-http:
 	@echo "Testing HTTP endpoint..."
-	@curl -X POST -H "Content-Type: application/json" -d '{"name": "World"}' http://localhost:8080/v1/greeter/hello | jq .
+	@if [ -z "$$AUTH0_TOKEN" ] && [ "$$(grep -E '^AUTH_DISABLED=true$$' .env)" = "" ]; then \
+		echo "Error: Please set AUTH0_TOKEN environment variable or enable AUTH_DISABLED in .env"; \
+		exit 1; \
+	fi
+	@if [ -n "$$AUTH0_TOKEN" ]; then \
+		curl -X POST -v \
+			-H "Authorization: Bearer $$AUTH0_TOKEN" \
+			-H "Content-Type: application/json" \
+			-d '{"name": "World"}' \
+			http://localhost:8080/v1/greeter/hello ; \
+	else \
+		curl -X POST \
+			-H "Content-Type: application/json" \
+			-d '{"name": "World"}' \
+			http://localhost:8080/v1/greeter/hello | jq .; \
+	fi
 
 # Help command
 help:
@@ -69,5 +84,5 @@ help:
 	@echo "  make client   - Run the client"
 	@echo "  make clean    - Clean build artifacts"
 	@echo "  make deps     - Install dependencies"
-	@echo "  make test-http- Test the HTTP endpoint"
-	@echo "  make help     - Show this help message" 
+	@echo "  make test-http- Test the HTTP endpoint (requires AUTH0_TOKEN or AUTH_DISABLED=true)"
+	@echo "  make help     - Show this help message"
