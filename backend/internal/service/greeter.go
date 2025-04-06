@@ -1,22 +1,23 @@
 package service
 
 import (
-    "context"
-    "fmt"
-    pb "meche/proto/v1"
+	"context"
+	"fmt"
+
+	pb "github.com/og3og/meche/backend/proto/v1"
 )
 
 type GreeterServer struct {
-    pb.UnimplementedGreeterServiceServer
+	pb.UnimplementedGreeterServiceServer
 }
 
 func NewGreeterServer() *GreeterServer {
-    return &GreeterServer{}
+	return &GreeterServer{}
 }
 
 func (s *GreeterServer) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
-    message := fmt.Sprintf("Hello, %s!", req.Name)
-    return &pb.HelloResponse{
-        Message: message,
-    }, nil
-} 
+	message := fmt.Sprintf("Hello, %s!", req.Name)
+	return &pb.HelloResponse{
+		Message: message,
+	}, nil
+}

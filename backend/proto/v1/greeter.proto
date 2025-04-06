@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package greeter.v1;
 
-option go_package = "meche/proto/v1;greeterpb";
+option go_package = "github.com/og3og/meche/backend/proto/v1;greeterpb";
 
 import "google/api/annotations.proto";
 

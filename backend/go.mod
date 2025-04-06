@@ -1,4 +1,4 @@
-module meche
+module github.com/og3og/meche/backend
 
 go 1.24
 

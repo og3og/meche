@@ -10,8 +10,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"meche/internal/service"
-	pb "meche/proto/v1"
+	"github.com/og3og/meche/backend/internal/service"
+	pb "github.com/og3og/meche/backend/proto/v1"
 )
 
 func main() {
