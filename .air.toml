@@ -1,0 +1,39 @@
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+[build]
+# Build command that generates templ files and builds the server
+cmd = "templ generate && go build -o ./tmp/server ./cmd/server"
+bin = "./tmp/server"
+full_bin = "./tmp/server"
+# Watch both Go and Templ files
+include_ext = ["go", "templ"]
+# Exclude generated files and build artifacts
+exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+include_dir = []
+exclude_file = []
+exclude_regex = ["_templ\\.go$"]
+exclude_unchanged = true
+follow_symlink = false
+delay = 100 # ms
+stop_on_error = true
+log = "build-errors.log"
+send_interrupt = true
+kill_delay = 500 # ms
+
+[log]
+time = true
+main_only = false
+
+[color]
+main = "yellow"
+watcher = "cyan"
+build = "green"
+runner = "magenta"
+
+[misc]
+clean_on_exit = true
+
+[screen]
+clear_on_rebuild = true 

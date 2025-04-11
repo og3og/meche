@@ -1,47 +1,83 @@
-# Meche Monorepo
+# Go Web Application
 
-This monorepo contains both the backend gRPC/HTTP API service and the frontend web application.
+A modern web application built with Go and Templ templating engine.
+
+## Prerequisites
+
+- Go 1.21 or later
+- Make
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone <your-repository-url>
+cd <repository-name>
+```
+
+2. Install development dependencies:
+```bash
+make install-deps
+```
+
+This will install:
+- [Air](https://github.com/cosmtrek/air) - Live reload for Go applications
+- [Templ](https://github.com/a-h/templ) - HTML templating for Go
+
+## Development
+
+### Available Commands
+
+- **Run the application in development mode**:
+  ```bash
+  make dev
+  ```
+  This will start the application with hot reload enabled.
+
+- **Generate Templ files**:
+  ```bash
+  make generate
+  ```
+  Run this when you modify any `.templ` files.
+
+- **Build the application**:
+  ```bash
+  make build
+  ```
+  This will generate Templ files and build the Go binary.
+
+- **Clean build artifacts**:
+  ```bash
+  make clean
+  ```
+
+- **Run tests**:
+  ```bash
+  make test
+  ```
+
+For a full list of available commands, run:
+```bash
+make help
+```
 
 ## Project Structure
 
 ```
 .
-├── backend/           # Backend service
-│   ├── cmd/
-│   │   ├── server/   # gRPC and HTTP server implementation
-│   │   └── client/   # gRPC client implementation
-│   ├── internal/
-│   │   └── service/  # Service implementation
-│   ├── proto/
-│   │   └── v1/      # Protocol buffer definitions
-│   ├── bin/         # Compiled binaries
-│   ├── buf.yaml     # Buf configuration
-│   ├── buf.gen.yaml # Buf generation configuration
-│   ├── go.mod       # Go module file
-│   └── Makefile     # Backend build commands
-└── www/             # Frontend web application (coming soon)
+├── .air.toml          # Air configuration for hot reload
+├── Makefile           # Build and development commands
+└── tmp/               # Build artifacts (gitignored)
 ```
 
-## Components
+## Contributing
 
-### Backend Service
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-The backend provides a gRPC service with an HTTP gateway, allowing the same service to be accessed via both gRPC and REST endpoints. [More details](backend/README.md)
+## License
 
-### Frontend Application
-
-The frontend web application will be a modern web interface that communicates with the backend service. (Coming soon)
-
-## Development
-
-### Backend Development
-
-Navigate to the backend directory and follow the instructions in its README:
-```bash
-cd backend
-make run-all  # Builds and runs the backend service
-```
-
-### Frontend Development
-
-Frontend development instructions will be added soon. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
