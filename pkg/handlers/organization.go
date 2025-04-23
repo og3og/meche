@@ -130,7 +130,7 @@ func EditOrganizationForm(orgStorage storage.OrganizationStorage) echo.HandlerFu
 		if err != nil {
 			return c.String(http.StatusNotFound, "Organization not found")
 		}
-		return pages.EditOrganizationForm(org).Render(c.Request().Context(), c.Response().Writer)
+		return pages.OrganizationEdit(org).Render(c.Request().Context(), c.Response().Writer)
 	}
 }
 
@@ -167,6 +167,8 @@ func UpdateOrganization(orgStorage storage.OrganizationStorage) echo.HandlerFunc
 			return c.String(http.StatusInternalServerError, "Failed to update organization")
 		}
 
+		// Return a redirect response
+		c.Response().Header().Set("HX-Redirect", "/organizations/"+id)
 		return c.NoContent(http.StatusOK)
 	}
 }
