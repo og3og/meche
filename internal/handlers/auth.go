@@ -56,12 +56,31 @@ func HandleCallback(c echo.Context) error {
 	// Debug: Print user info
 	fmt.Printf("User logged in: %+v\n", user)
 
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+	return c.Redirect(http.StatusTemporaryRedirect, "/dashboard")
 }
 
 // HandleLogout logs out the user
 func HandleLogout(c echo.Context) error {
+	// Get the session
+	session, err := gothic.Store.Get(c.Request(), sessionName)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Error getting session")
+	}
+
+	// Clear all session values
+	session.Values = make(map[interface{}]interface{})
+
+	// Set MaxAge to -1 to delete the cookie
+	session.Options.MaxAge = -1
+
+	// Save the session
+	if err := session.Save(c.Request(), c.Response()); err != nil {
+		return c.String(http.StatusInternalServerError, "Error saving session")
+	}
+
+	// Call gothic logout
 	gothic.Logout(c.Response(), c.Request())
+
 	return c.Redirect(http.StatusTemporaryRedirect, "/")
 }
 

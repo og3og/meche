@@ -1,0 +1,75 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# rules.cursor
+
+[project]
+name = "Meche"
+description = "A lightweight project management tool for residential construction projects."
+language = "Go"
+go_version = "1.24.1"
+
+[ui]
+# All UI components must be written using HTMX
+framework = "HTMX"
+htmx_docs = "https://htmx.org"
+guidelines = """
+- Use semantic HTML5 elements (e.g. <section>, <article>, <aside>) for layout structure.
+- All client-server interaction should use HTMX attributes (`hx-get`, `hx-post`, etc.).
+- Avoid full-page reloads—prefer partials and fragment rendering.
+- Use progressive enhancement—fallbacks must exist for unsupported features.
+- Do not use frontend frameworks like React or Vue—HTMX only.
+- TailwindCSS is allowed for styling, but not required.
+"""
+
+[templates]
+# Use Templ for Go HTML templates
+engine = "Templ"
+templ_docs = "https://templ.guide"
+rules = """
+- All templates must be written using Templ.
+- Avoid using Go's standard html/template or text/template directly.
+- Template files should be placed in `/templates`.
+- Templates should be modular and reusable.
+- Use proper data typing and template components for layout reuse.
+"""
+
+[backend]
+language = "Go"
+version = "1.24.1"
+framework = "Standard Library + net/http"
+routing = """
+- Use standard net/http mux or chi router.
+- Define routes clearly by resource, grouped in files.
+- All route handlers must return valid HTML fragments when triggered by HTMX.
+"""
+
+[code_style]
+go_fmt = true
+linting_tool = "golangci-lint"
+guidelines = """
+- Use idiomatic Go (Effective Go, Go Proverbs).
+- Group imports: standard, third-party, internal.
+- Avoid global state unless necessary.
+- Error handling should be explicit—no silent failures.
+- Tests should go under _test.go files and be run via `go test ./...`.
+"""
+
+[version_control]
+vcs = "git"
+rules = """
+- All commits should follow Conventional Commits (https://www.conventionalcommits.org).
+- Feature branches must follow the format: `feat/short-description`.
+- Use Pull Requests for merging into main.
+- Each PR must pass linting and tests.
+"""
+
+[environment]
+env_files = [".env", ".env.local"]
+rules = """
+- Configuration must be loaded via environment variables.
+- Do not commit secrets—use .env and gitignore.
+- Use `os.Getenv()` or config loader to access variables in Go.
+"""

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"meche/internal/handlers"
 	customMiddleware "meche/internal/middleware"
+	orgHandlers "meche/pkg/handlers"
+	"meche/pkg/storage"
+	"meche/pkg/storage/memory"
 	"net/http"
 	"os"
 
@@ -20,6 +23,9 @@ func NewServer() *echo.Echo {
 
 	// Setup middleware
 	customMiddleware.SetupMiddleware(e)
+
+	// Add validator middleware
+	e.Validator = &CustomValidator{}
 
 	// Initialize the session store
 	key := []byte("your-secret-key") // Replace with a secure key in production
@@ -48,17 +54,29 @@ func NewServer() *echo.Echo {
 		),
 	)
 
+	// Initialize storage
+	orgStorage := memory.NewMemoryOrganizationStorage()
+	memberStorage := memory.NewMemoryOrganizationMemberStorage()
+
 	// Serve static files
 	e.Static("/static", "static")
 
 	// Setup routes
-	setupRoutes(e)
+	setupRoutes(e, orgStorage, memberStorage)
 
 	return e
 }
 
+// CustomValidator implements echo.Validator interface
+type CustomValidator struct{}
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return nil // We're using struct tags for validation
+}
+
 // setupRoutes configures all routes for the application
-func setupRoutes(e *echo.Echo) {
+func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberStorage storage.OrganizationMemberStorage) {
+	// Auth routes
 	e.GET("/", handlers.HandleHome)
 	e.GET("/login", handlers.HandleLogin)
 	e.GET("/auth/google", handlers.HandleAuth)
@@ -66,7 +84,35 @@ func setupRoutes(e *echo.Echo) {
 	e.GET("/logout", handlers.HandleLogout)
 
 	// Protected routes
-	dashboard := e.Group("/dashboard")
-	dashboard.Use(customMiddleware.AuthMiddleware)
-	dashboard.GET("", handlers.HandleDashboard)
+	protected := e.Group("")
+	protected.Use(customMiddleware.AuthMiddleware)
+	protected.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			session, err := gothic.Store.Get(c.Request(), "gothic-session")
+			if err != nil {
+				return c.String(http.StatusUnauthorized, "User not authenticated")
+			}
+
+			user, ok := session.Values["user"].(goth.User)
+			if !ok {
+				return c.String(http.StatusUnauthorized, "User not authenticated")
+			}
+
+			c.Set("user", user)
+			return next(c)
+		}
+	})
+
+	// Dashboard route
+	protected.GET("/dashboard", handlers.HandleDashboard)
+
+	// Organization routes
+	protected.POST("/organizations", orgHandlers.CreateOrganization(orgStorage, memberStorage))
+	protected.GET("/organizations", orgHandlers.ListOrganizations(orgStorage))
+	protected.GET("/organizations/new", orgHandlers.NewOrganizationForm)
+	protected.GET("/organizations/cancel", orgHandlers.CancelOrganizationForm)
+	protected.DELETE("/organizations/:id", orgHandlers.DeleteOrganization(orgStorage))
+	protected.GET("/organizations/:id/edit", orgHandlers.EditOrganizationForm(orgStorage))
+	protected.PUT("/organizations/:id", orgHandlers.UpdateOrganization(orgStorage))
+	protected.GET("/organizations/:id", orgHandlers.ShowOrganization(orgStorage))
 }

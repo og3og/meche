@@ -1,0 +1,85 @@
+package pages
+
+import (
+    "meche/templates/layouts"
+    "meche/pkg/models"
+)
+
+templ OrganizationDetails(org *models.Organization) {
+    @layouts.Layout() {
+        <div class="min-h-screen bg-gray-50">
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="px-4 py-6 sm:px-0">
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-900">{ org.Name }</h1>
+                                <p class="text-gray-600 mt-1">{ org.Description }</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a
+                                    href="/dashboard"
+                                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                                >
+                                    Back to Dashboard
+                                </a>
+                                <a
+                                    href={ templ.SafeURL("/organizations/" + org.ID + "/edit") }
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                >
+                                    Edit Organization
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg">
+                                <h3 class="text-lg font-semibold text-blue-800 mb-2">Organization Details</h3>
+                                <div class="space-y-2">
+                                    <p class="text-blue-700">
+                                        <span class="font-medium">Created:</span> { org.CreatedAt.Format("Jan 02, 2006") }
+                                    </p>
+                                    <p class="text-blue-700">
+                                        <span class="font-medium">Last Updated:</span> { org.UpdatedAt.Format("Jan 02, 2006") }
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-6 rounded-lg">
+                                <h3 class="text-lg font-semibold text-green-800 mb-2">Quick Actions</h3>
+                                <div class="space-y-2">
+                                    <button
+                                        hx-get={ "/organizations/" + org.ID + "/projects/new" }
+                                        hx-target="#project-form"
+                                        hx-swap="innerHTML"
+                                        class="text-green-700 hover:text-green-900"
+                                    >
+                                        Create New Project
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Form Container -->
+                        <div id="project-form" class="mt-6"></div>
+
+                        <!-- Projects List -->
+                        <div class="mt-8">
+                            <h2 class="text-xl font-bold text-gray-900 mb-4">Projects</h2>
+                            <div 
+                                hx-get={ "/organizations/" + org.ID + "/projects" }
+                                hx-trigger="load, project-created from:body, project-deleted from:body"
+                                hx-target="#projects-list"
+                                hx-swap="innerHTML"
+                            >
+                                <div id="projects-list" class="space-y-4">
+                                    <!-- Projects will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+} 
