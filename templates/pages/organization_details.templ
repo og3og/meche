@@ -3,10 +3,11 @@ package pages
 import (
     "meche/templates/layouts"
     "meche/pkg/models"
+    "github.com/markbates/goth"
 )
 
-templ OrganizationDetails(org *models.Organization) {
-    @layouts.Layout() {
+templ OrganizationDetails(user goth.User, organizations []*models.Organization, org *models.Organization, projects []*models.Project) {
+    @layouts.AuthenticatedLayout(user, organizations, org.ID, projects) {
         <div class="min-h-screen bg-gray-50">
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div class="px-4 py-6 sm:px-0">
@@ -17,18 +18,14 @@ templ OrganizationDetails(org *models.Organization) {
                                 <p class="text-gray-600 mt-1">{ org.Description }</p>
                             </div>
                             <div class="flex space-x-2">
-                                <a
-                                    href="/dashboard"
-                                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
-                                >
-                                    Back to Dashboard
-                                </a>
-                                <a
-                                    href={ templ.SafeURL("/organizations/" + org.ID + "/edit") }
+                                <button
+                                    hx-get={ "/organizations/" + org.ID + "/edit" }
+                                    hx-target="#organization-form"
+                                    hx-swap="innerHTML"
                                     class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                                 >
                                     Edit Organization
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -66,15 +63,23 @@ templ OrganizationDetails(org *models.Organization) {
                         <!-- Projects List -->
                         <div class="mt-8">
                             <h2 class="text-xl font-bold text-gray-900 mb-4">Projects</h2>
-                            <div 
-                                hx-get={ "/organizations/" + org.ID + "/projects" }
-                                hx-trigger="load, project-created from:body, project-deleted from:body"
-                                hx-target="#projects-list"
-                                hx-swap="innerHTML"
-                            >
-                                <div id="projects-list" class="space-y-4">
-                                    <!-- Projects will be loaded here -->
-                                </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                for _, project := range projects {
+                                    <div class="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                                        <div class="p-6">
+                                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                                <a href={ templ.SafeURL("/organizations/" + org.ID + "/projects/" + project.ID) } class="hover:text-blue-600">
+                                                    { project.Name }
+                                                </a>
+                                            </h3>
+                                            <p class="text-gray-600 mb-4">{ project.Description }</p>
+                                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                                <span>Created: { project.CreatedAt.Format("Jan 02, 2006") }</span>
+                                                <span>Updated: { project.UpdatedAt.Format("Jan 02, 2006") }</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,8 @@ import (
 	"meche/templates/pages"
 	"net/http"
 
+	"meche/pkg/storage"
+
 	"github.com/labstack/echo/v4"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
@@ -96,5 +98,17 @@ func HandleDashboard(c echo.Context) error {
 		return c.Redirect(http.StatusTemporaryRedirect, "/login")
 	}
 
-	return pages.Dashboard(user).Render(c.Request().Context(), c.Response().Writer)
+	// Get organization storage from context
+	orgStorage, ok := c.Get("organization_storage").(storage.OrganizationStorage)
+	if !ok {
+		return c.String(http.StatusInternalServerError, "Organization storage not found")
+	}
+
+	// Get all organizations
+	organizations, err := orgStorage.ListOrganizations()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, fmt.Sprintf("Error fetching organizations: %v", err))
+	}
+
+	return pages.Dashboard(user, organizations).Render(c.Request().Context(), c.Response().Writer)
 }

@@ -99,7 +99,12 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 				return c.String(http.StatusUnauthorized, "User not authenticated")
 			}
 
+			// Add storage instances to context
+			c.Set("organization_storage", orgStorage)
+			c.Set("member_storage", memberStorage)
+			c.Set("project_storage", projectStorage)
 			c.Set("user", user)
+
 			return next(c)
 		}
 	})
@@ -115,14 +120,14 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 	protected.DELETE("/organizations/:id", orgHandlers.DeleteOrganization(orgStorage))
 	protected.GET("/organizations/:id/edit", orgHandlers.EditOrganizationForm(orgStorage))
 	protected.PUT("/organizations/:id", orgHandlers.UpdateOrganization(orgStorage))
-	protected.GET("/organizations/:id", orgHandlers.ShowOrganization(orgStorage))
+	protected.GET("/organizations/:id", orgHandlers.ShowOrganization(orgStorage, projectStorage))
 
 	// Project routes
 	protected.POST("/organizations/:orgID/projects", orgHandlers.CreateProject(projectStorage))
 	protected.GET("/organizations/:orgID/projects", orgHandlers.ListProjects(projectStorage))
 	protected.GET("/organizations/:orgID/projects/new", orgHandlers.NewProjectForm)
 	protected.GET("/organizations/:orgID/projects/cancel", orgHandlers.CancelProjectForm)
-	protected.GET("/organizations/:orgID/projects/:id", orgHandlers.ShowProject(projectStorage))
+	protected.GET("/organizations/:orgID/projects/:id", orgHandlers.ShowProject(projectStorage, orgStorage))
 	protected.GET("/organizations/:orgID/projects/:id/edit", orgHandlers.EditProjectForm(projectStorage))
 	protected.PUT("/organizations/:orgID/projects/:id", orgHandlers.UpdateProject(projectStorage))
 	protected.DELETE("/organizations/:orgID/projects/:id", orgHandlers.DeleteProject(projectStorage))

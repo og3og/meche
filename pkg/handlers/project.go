@@ -5,9 +5,11 @@ import (
 	"meche/pkg/storage"
 	"meche/templates/pages"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/markbates/goth"
 )
 
 // ProjectRequest represents the request body for creating or updating a project
@@ -64,8 +66,9 @@ func CreateProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 			return c.String(http.StatusInternalServerError, "Failed to create project")
 		}
 
-		// Return the project list item HTML
-		return pages.ProjectList([]*models.Project{project}).Render(c.Request().Context(), c.Response().Writer)
+		// Return a redirect response to the project view page
+		c.Response().Header().Set("HX-Redirect", "/organizations/"+orgID+"/projects/"+project.ID)
+		return c.NoContent(http.StatusOK)
 	}
 }
 
@@ -82,7 +85,7 @@ func ListProjects(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 }
 
 // ShowProject displays the details of a specific project
-func ShowProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+func ShowProject(projectStorage storage.ProjectStorage, orgStorage storage.OrganizationStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 		project, err := projectStorage.GetProject(id)
@@ -90,7 +93,30 @@ func ShowProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 			return c.String(http.StatusNotFound, "Project not found")
 		}
 
-		return pages.ProjectDetails(project).Render(c.Request().Context(), c.Response().Writer)
+		// Get the current user from the session
+		user, ok := c.Get("user").(goth.User)
+		if !ok {
+			return c.String(http.StatusUnauthorized, "User not authenticated")
+		}
+
+		// Get all organizations for the user
+		organizations, err := orgStorage.ListOrganizations()
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch organizations")
+		}
+
+		// Get all projects for the current organization and sort them alphabetically
+		projects, err := projectStorage.ListProjects(project.OrgID)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch projects")
+		}
+
+		// Sort projects alphabetically by name
+		sort.Slice(projects, func(i, j int) bool {
+			return strings.ToLower(projects[i].Name) < strings.ToLower(projects[j].Name)
+		})
+
+		return pages.ProjectDetails(user, organizations, project, projects).Render(c.Request().Context(), c.Response().Writer)
 	}
 }
 

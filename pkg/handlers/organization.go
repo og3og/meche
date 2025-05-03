@@ -5,6 +5,7 @@ import (
 	"meche/pkg/storage"
 	"meche/templates/pages"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -83,7 +84,9 @@ func CreateOrganization(orgStorage storage.OrganizationStorage, memberStorage st
 			return c.String(http.StatusInternalServerError, "Failed to create organization membership")
 		}
 
-		return c.Redirect(http.StatusSeeOther, "/organizations")
+		// Return a redirect response to the specific organization view
+		c.Response().Header().Set("HX-Redirect", "/organizations/"+org.ID)
+		return c.NoContent(http.StatusOK)
 	}
 }
 
@@ -174,14 +177,37 @@ func UpdateOrganization(orgStorage storage.OrganizationStorage) echo.HandlerFunc
 }
 
 // ShowOrganization displays the details of a specific organization
-func ShowOrganization(storage storage.OrganizationStorage) echo.HandlerFunc {
+func ShowOrganization(orgStorage storage.OrganizationStorage, projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		org, err := storage.GetOrganization(id)
+		org, err := orgStorage.GetOrganization(id)
 		if err != nil {
 			return c.String(http.StatusNotFound, "Organization not found")
 		}
 
-		return pages.OrganizationDetails(org).Render(c.Request().Context(), c.Response().Writer)
+		// Get the current user from the session
+		user, ok := c.Get("user").(goth.User)
+		if !ok {
+			return c.String(http.StatusUnauthorized, "User not authenticated")
+		}
+
+		// Get all organizations for the user
+		organizations, err := orgStorage.ListOrganizations()
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch organizations")
+		}
+
+		// Get all projects for the organization and sort them alphabetically
+		projects, err := projectStorage.ListProjects(org.ID)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch projects")
+		}
+
+		// Sort projects alphabetically by name
+		sort.Slice(projects, func(i, j int) bool {
+			return strings.ToLower(projects[i].Name) < strings.ToLower(projects[j].Name)
+		})
+
+		return pages.OrganizationDetails(user, organizations, org, projects).Render(c.Request().Context(), c.Response().Writer)
 	}
 }

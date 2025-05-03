@@ -14,4 +14,14 @@ uuid_rules = """
 """
 
 [code_style]
+go_fmt = true
+linting_tool = "golangci-lint"
+guidelines = """
+- Use idiomatic Go (Effective Go, Go Proverbs).
+- Group imports: standard, third-party, internal.
+- Avoid global state unless necessary.
+- Error handling should be explicit—no silent failures.
+- Tests should go under _test.go files and be run via `go test ./...`.
+- All lists of data returned from the backend must be alphabetically sorted by default.
+"""
 // ... existing code ... 

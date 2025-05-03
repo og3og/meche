@@ -1,0 +1,128 @@
+package layouts
+
+import (
+    "meche/pkg/models"
+    "github.com/markbates/goth"
+)
+
+templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, currentOrgID string, projects []*models.Project) {
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Meche</title>
+            <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-gray-50">
+            <!-- Top Navigation -->
+            <nav class="bg-white border-b border-gray-200 fixed w-full z-30">
+                <div class="px-3 py-3 lg:px-5 lg:pl-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            if currentOrgID != "" {
+                                <button id="toggleSidebar" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            }
+                            <div class="ml-3">
+                                if len(organizations) == 0 {
+                                    <button 
+                                        hx-get="/organizations/new" 
+                                        hx-target="#organization-form" 
+                                        hx-swap="innerHTML" 
+                                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                                    >
+                                        Create Organization
+                                    </button>
+                                } else {
+                                    <select 
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                        onchange="if(this.value === 'dashboard') { window.location.href = '/dashboard'; } else { window.location.href = '/organizations/' + this.value; }"
+                                    >
+                                        if currentOrgID == "" {
+                                            <option value="dashboard" selected>Dashboard</option>
+                                        } else {
+                                            <option value="dashboard">Dashboard</option>
+                                        }
+                                        for _, org := range organizations {
+                                            if org.ID == currentOrgID {
+                                                <option value={ org.ID } selected>{ org.Name }</option>
+                                            } else {
+                                                <option value={ org.ID }>{ org.Name }</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="relative">
+                                <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300">
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="w-8 h-8 rounded-full" src={ user.AvatarURL } alt="user photo"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Sidebar - Only shown when an organization is selected -->
+            if currentOrgID != "" {
+                <aside id="sidebar" class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
+                    <div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200">
+                        <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+                            <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200">
+                                <ul class="pb-2 space-y-2">
+                                    <li>
+                                        <span class="text-sm font-semibold text-gray-500 uppercase">Projects</span>
+                                        <ul class="mt-2 space-y-1">
+                                            for _, project := range projects {
+                                                <li>
+                                                    <a 
+                                                        href={ templ.SafeURL("/organizations/" + project.OrgID + "/projects/" + project.ID) }
+                                                        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                                                    >
+                                                        <span class="ml-3">{ project.Name }</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            }
+
+            <!-- Main Content -->
+            if currentOrgID != "" {
+                <div class="p-4 sm:ml-64 pt-16">
+                    <div class="p-4 rounded-lg mt-14">
+                        { children... }
+                    </div>
+                </div>
+            } else {
+                <div class="p-4 pt-16">
+                    <div class="p-4 rounded-lg mt-14">
+                        { children... }
+                    </div>
+                </div>
+            }
+
+            if currentOrgID != "" {
+                <script>
+                    // Toggle sidebar
+                    document.getElementById('toggleSidebar').addEventListener('click', function() {
+                        document.getElementById('sidebar').classList.toggle('hidden');
+                    });
+                </script>
+            }
+        </body>
+    </html>
+} 

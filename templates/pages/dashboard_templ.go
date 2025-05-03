@@ -10,10 +10,12 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"github.com/markbates/goth"
+	"meche/pkg/models"
 	"meche/templates/layouts"
+	"strconv"
 )
 
-func Dashboard(user goth.User) templ.Component {
+func Dashboard(user goth.User, organizations []*models.Organization) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -46,78 +48,39 @@ func Dashboard(user goth.User) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg p-6\"><div class=\"flex items-center space-x-4 mb-6\"><img src=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg p-6\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">Welcome, ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(user.AvatarURL)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(user.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 16, Col: 52}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 18, Col: 97}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" alt=\"Profile\" class=\"w-16 h-16 rounded-full\"><div><h1 class=\"text-2xl font-bold text-gray-900\">Welcome, ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><p class=\"text-gray-600 mt-1\">Manage your organizations and projects</p></div></div><div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\"><div class=\"bg-blue-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-blue-800 mb-2\">Quick Stats</h3><div class=\"space-y-2\"><p class=\"text-blue-700\"><span class=\"font-medium\">Organizations:</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(user.Name)
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(len(organizations)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 21, Col: 97}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 28, Col: 122}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</h1><p class=\"text-gray-600\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(user.Email)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 22, Col: 69}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</p></div></div><div class=\"grid grid-cols-1 md:grid-cols-3 gap-6\"><div class=\"bg-blue-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-blue-800 mb-2\">Quick Stats</h3><div class=\"space-y-2\"><p class=\"text-blue-700\">Member since: ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(user.FirstName)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 30, Col: 91}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p><p class=\"text-blue-700\">Last login: ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(user.LastName)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/dashboard.templ`, Line: 31, Col: 88}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</p></div></div><div class=\"bg-green-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-green-800 mb-2\">Recent Activity</h3><div class=\"space-y-2\"><p class=\"text-green-700\">No recent activity</p></div></div><div class=\"bg-purple-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-purple-800 mb-2\">Quick Actions</h3><div class=\"space-y-2\"><a href=\"/logout\" class=\"block text-purple-700 hover:text-purple-900\">Logout</a></div></div></div><!-- Organizations Section --><div class=\"mt-8\"><div class=\"flex justify-between items-center mb-4\"><h2 class=\"text-xl font-bold text-gray-900\">Your Organizations</h2><button hx-get=\"/organizations/new\" hx-target=\"#organization-form\" hx-swap=\"innerHTML\" class=\"px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors\">Create Organization</button></div><!-- Organization Form Container --><div id=\"organization-form\" class=\"mb-6\"></div><!-- Error Box Container --><div id=\"error-box\" class=\"mb-6\"></div><!-- Organizations List --><div hx-get=\"/organizations\" hx-trigger=\"load, organization-created from:body, organization-deleted from:body\" hx-target=\"#organizations-list\" hx-swap=\"innerHTML\"><div id=\"organizations-list\" class=\"space-y-4\"><!-- Organizations will be loaded here --></div></div></div></div></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div></div><div class=\"bg-green-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-green-800 mb-2\">Quick Actions</h3><div class=\"space-y-2\"><button hx-get=\"/organizations/new\" hx-target=\"#organization-form\" hx-swap=\"innerHTML\" class=\"text-green-700 hover:text-green-900\">Create New Organization</button></div></div></div><!-- Organization Form Container --><div id=\"organization-form\" class=\"mt-6\"></div><!-- Organizations List --><div class=\"mt-8\"><h2 class=\"text-xl font-bold text-gray-900 mb-4\">Your Organizations</h2><div hx-get=\"/organizations\" hx-trigger=\"load, organization-created from:body, organization-deleted from:body\" hx-target=\"#organizations-list\" hx-swap=\"innerHTML\"><div id=\"organizations-list\" class=\"space-y-4\"><!-- Organizations will be loaded here --></div></div></div></div></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.Layout().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.AuthenticatedLayout(user, organizations, "", []*models.Project{}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

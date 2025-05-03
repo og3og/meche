@@ -7,8 +7,8 @@ templ ProjectForm(orgID string) {
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Project</h3>
         <form 
             hx-post={ "/organizations/" + orgID + "/projects" }
-            hx-target="#projects-list"
-            hx-swap="beforeend"
+            hx-target="body"
+            hx-swap="none"
             hx-on::after-request="this.reset(); document.getElementById('project-form').innerHTML = ''; htmx.trigger('body', 'project-created')"
             class="space-y-4"
         >

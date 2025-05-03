@@ -60,6 +60,7 @@ guidelines = """
 - Avoid global state unless necessary.
 - Error handling should be explicit—no silent failures.
 - Tests should go under _test.go files and be run via `go test ./...`.
+- All lists of data returned from the backend must be alphabetically sorted by default.
 """
 
 [version_control]

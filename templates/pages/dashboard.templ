@@ -3,76 +3,54 @@ package pages
 import (
     "meche/templates/layouts"
     "github.com/markbates/goth"
+    "meche/pkg/models"
+    "strconv"
 )
 
-templ Dashboard(user goth.User) {
-    @layouts.Layout() {
+templ Dashboard(user goth.User, organizations []*models.Organization) {
+    @layouts.AuthenticatedLayout(user, organizations, "", []*models.Project{}) {
         <div class="min-h-screen bg-gray-50">
             <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div class="px-4 py-6 sm:px-0">
                     <div class="bg-white shadow rounded-lg p-6">
-                        <div class="flex items-center space-x-4 mb-6">
-                            <img 
-                                src={ user.AvatarURL } 
-                                alt="Profile" 
-                                class="w-16 h-16 rounded-full"
-                            />
+                        <div class="flex justify-between items-start mb-6">
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-900">Welcome, { user.Name }</h1>
-                                <p class="text-gray-600">{ user.Email }</p>
+                                <p class="text-gray-600 mt-1">Manage your organizations and projects</p>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-blue-50 p-6 rounded-lg">
                                 <h3 class="text-lg font-semibold text-blue-800 mb-2">Quick Stats</h3>
                                 <div class="space-y-2">
-                                    <p class="text-blue-700">Member since: { user.FirstName }</p>
-                                    <p class="text-blue-700">Last login: { user.LastName }</p>
+                                    <p class="text-blue-700">
+                                        <span class="font-medium">Organizations:</span> { strconv.Itoa(len(organizations)) }
+                                    </p>
                                 </div>
                             </div>
 
                             <div class="bg-green-50 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-green-800 mb-2">Recent Activity</h3>
+                                <h3 class="text-lg font-semibold text-green-800 mb-2">Quick Actions</h3>
                                 <div class="space-y-2">
-                                    <p class="text-green-700">No recent activity</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-purple-50 p-6 rounded-lg">
-                                <h3 class="text-lg font-semibold text-purple-800 mb-2">Quick Actions</h3>
-                                <div class="space-y-2">
-                                    <a 
-                                        href="/logout" 
-                                        class="block text-purple-700 hover:text-purple-900"
+                                    <button
+                                        hx-get="/organizations/new"
+                                        hx-target="#organization-form"
+                                        hx-swap="innerHTML"
+                                        class="text-green-700 hover:text-green-900"
                                     >
-                                        Logout
-                                    </a>
+                                        Create New Organization
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Organizations Section -->
+                        <!-- Organization Form Container -->
+                        <div id="organization-form" class="mt-6"></div>
+
+                        <!-- Organizations List -->
                         <div class="mt-8">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-xl font-bold text-gray-900">Your Organizations</h2>
-                                <button
-                                    hx-get="/organizations/new"
-                                    hx-target="#organization-form"
-                                    hx-swap="innerHTML"
-                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                                >
-                                    Create Organization
-                                </button>
-                            </div>
-                            
-                            <!-- Organization Form Container -->
-                            <div id="organization-form" class="mb-6"></div>
-
-                            <!-- Error Box Container -->
-                            <div id="error-box" class="mb-6"></div>
-
-                            <!-- Organizations List -->
+                            <h2 class="text-xl font-bold text-gray-900 mb-4">Your Organizations</h2>
                             <div 
                                 hx-get="/organizations"
                                 hx-trigger="load, organization-created from:body, organization-deleted from:body"
