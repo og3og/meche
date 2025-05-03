@@ -1,0 +1,17 @@
+[backend]
+language = "Go"
+version = "1.24.1"
+framework = "Standard Library + net/http"
+routing = """
+- Use standard net/http mux or chi router.
+- Define routes clearly by resource, grouped in files.
+- All route handlers must return valid HTML fragments when triggered by HTMX.
+"""
+uuid_rules = """
+- All UUIDs and IDs must be 8 characters long.
+- Use crypto/rand for secure random generation.
+- IDs should be hex-encoded (4 random bytes = 8 hex characters).
+"""
+
+[code_style]
+// ... existing code ... 

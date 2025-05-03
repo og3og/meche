@@ -1,0 +1,73 @@
+package pages
+
+import (
+    "meche/templates/layouts"
+    "meche/pkg/models"
+)
+
+templ ProjectDetails(project *models.Project) {
+    @layouts.Layout() {
+        <div class="min-h-screen bg-gray-50">
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="px-4 py-6 sm:px-0">
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-900">{ project.Name }</h1>
+                                <p class="text-gray-600 mt-1">{ project.Description }</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a
+                                    href={ templ.SafeURL("/organizations/" + project.OrgID) }
+                                    class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                                >
+                                    Back to Organization
+                                </a>
+                                <button
+                                    hx-get={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/edit" }
+                                    hx-target="#project-form"
+                                    hx-swap="innerHTML"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                >
+                                    Edit Project
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg">
+                                <h3 class="text-lg font-semibold text-blue-800 mb-2">Project Details</h3>
+                                <div class="space-y-2">
+                                    <p class="text-blue-700">
+                                        <span class="font-medium">Created:</span> { project.CreatedAt.Format("Jan 02, 2006") }
+                                    </p>
+                                    <p class="text-blue-700">
+                                        <span class="font-medium">Last Updated:</span> { project.UpdatedAt.Format("Jan 02, 2006") }
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="bg-green-50 p-6 rounded-lg">
+                                <h3 class="text-lg font-semibold text-green-800 mb-2">Quick Actions</h3>
+                                <div class="space-y-2">
+                                    <button
+                                        hx-delete={ "/organizations/" + project.OrgID + "/projects/" + project.ID }
+                                        hx-confirm="Are you sure you want to delete this project?"
+                                        hx-target="body"
+                                        hx-redirect={ "/organizations/" + project.OrgID }
+                                        class="text-red-700 hover:text-red-900"
+                                    >
+                                        Delete Project
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Form Container -->
+                        <div id="project-form" class="mt-6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+} 

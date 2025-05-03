@@ -57,12 +57,13 @@ func NewServer() *echo.Echo {
 	// Initialize storage
 	orgStorage := memory.NewMemoryOrganizationStorage()
 	memberStorage := memory.NewMemoryOrganizationMemberStorage()
+	projectStorage := memory.NewMemoryProjectStorage()
 
 	// Serve static files
 	e.Static("/static", "static")
 
 	// Setup routes
-	setupRoutes(e, orgStorage, memberStorage)
+	setupRoutes(e, orgStorage, memberStorage, projectStorage)
 
 	return e
 }
@@ -75,7 +76,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 // setupRoutes configures all routes for the application
-func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberStorage storage.OrganizationMemberStorage) {
+func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberStorage storage.OrganizationMemberStorage, projectStorage storage.ProjectStorage) {
 	// Auth routes
 	e.GET("/", handlers.HandleHome)
 	e.GET("/login", handlers.HandleLogin)
@@ -115,4 +116,14 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 	protected.GET("/organizations/:id/edit", orgHandlers.EditOrganizationForm(orgStorage))
 	protected.PUT("/organizations/:id", orgHandlers.UpdateOrganization(orgStorage))
 	protected.GET("/organizations/:id", orgHandlers.ShowOrganization(orgStorage))
+
+	// Project routes
+	protected.POST("/organizations/:orgID/projects", orgHandlers.CreateProject(projectStorage))
+	protected.GET("/organizations/:orgID/projects", orgHandlers.ListProjects(projectStorage))
+	protected.GET("/organizations/:orgID/projects/new", orgHandlers.NewProjectForm)
+	protected.GET("/organizations/:orgID/projects/cancel", orgHandlers.CancelProjectForm)
+	protected.GET("/organizations/:orgID/projects/:id", orgHandlers.ShowProject(projectStorage))
+	protected.GET("/organizations/:orgID/projects/:id/edit", orgHandlers.EditProjectForm(projectStorage))
+	protected.PUT("/organizations/:orgID/projects/:id", orgHandlers.UpdateProject(projectStorage))
+	protected.DELETE("/organizations/:orgID/projects/:id", orgHandlers.DeleteProject(projectStorage))
 }
