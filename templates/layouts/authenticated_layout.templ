@@ -5,7 +5,14 @@ import (
     "github.com/markbates/goth"
 )
 
-templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, currentOrgID string, projects []*models.Project) {
+func getProjectClass(projectID, currentProjectID string) string {
+    if projectID == currentProjectID {
+        return "bg-blue-50 text-blue-700"
+    }
+    return "text-gray-900 hover:bg-gray-100"
+}
+
+templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, currentOrgID string, currentProjectID string, projects []*models.Project) {
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -79,13 +86,25 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
                             <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200">
                                 <ul class="pb-2 space-y-2">
                                     <li>
-                                        <span class="text-sm font-semibold text-gray-500 uppercase">Projects</span>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-semibold text-gray-500 uppercase">Projects</span>
+                                            <button 
+                                                hx-get={ "/organizations/" + currentOrgID + "/projects/new" }
+                                                hx-target="#project-form"
+                                                hx-swap="innerHTML"
+                                                class="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full"
+                                            >
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                         <ul class="mt-2 space-y-1">
                                             for _, project := range projects {
                                                 <li>
                                                     <a 
                                                         href={ templ.SafeURL("/organizations/" + project.OrgID + "/projects/" + project.ID) }
-                                                        class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                                                        class={ "flex items-center p-2 rounded-lg group " + getProjectClass(project.ID, currentProjectID) }
                                                     >
                                                         <span class="ml-3">{ project.Name }</span>
                                                     </a>

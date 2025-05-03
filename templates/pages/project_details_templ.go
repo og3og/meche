@@ -47,113 +47,152 @@ func ProjectDetails(user goth.User, organizations []*models.Organization, projec
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg p-6\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-6\" aria-label=\"Tabs\"><button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(project.Name)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/overview")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 17, Col: 91}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 19, Col: 120}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><p class=\"text-gray-600 mt-1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Overview</button> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(project.Description)
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/tasks")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 18, Col: 83}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 27, Col: 117}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div><div class=\"flex space-x-2\"><a href=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Tasks</button> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL("/organizations/" + project.OrgID)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var5)))
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/settings")
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 35, Col: 120}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200\">Back to Organization</a> <button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-6 mt-[5px] ml-[5px]\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/edit")
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(project.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 28, Col: 116}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 49, Col: 95}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#project-form\" hx-swap=\"innerHTML\" class=\"px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600\">Edit Project</button></div></div><div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\"><div class=\"bg-blue-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-blue-800 mb-2\">Project Details</h3><div class=\"space-y-2\"><p class=\"text-blue-700\"><span class=\"font-medium\">Created:</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</h1><p class=\"text-gray-600 mt-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(project.CreatedAt.Format("Jan 02, 2006"))
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(project.Description)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 43, Col: 124}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 50, Col: 87}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</p><p class=\"text-blue-700\"><span class=\"font-medium\">Last Updated:</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</p></div><div class=\"flex space-x-2\"><a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(project.UpdatedAt.Format("Jan 02, 2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 46, Col: 129}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			var templ_7745c5c3_Var8 templ.SafeURL = templ.SafeURL("/organizations/" + project.OrgID)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var8)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</p></div></div><div class=\"bg-green-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-green-800 mb-2\">Quick Actions</h3><div class=\"space-y-2\"><button hx-delete=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200\">Back to Organization</a> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID)
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/edit")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 55, Col: 113}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 60, Col: 120}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" hx-confirm=\"Are you sure you want to delete this project?\" hx-target=\"body\" hx-redirect=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" hx-target=\"#project-form\" hx-swap=\"innerHTML\" class=\"px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600\">Edit Project</button></div></div><div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\"><div class=\"bg-blue-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-blue-800 mb-2\">Project Details</h3><div class=\"space-y-2\"><p class=\"text-blue-700\"><span class=\"font-medium\">Created:</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID)
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(project.CreatedAt.Format("Jan 02, 2006"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 58, Col: 87}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 75, Col: 128}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" class=\"text-red-700 hover:text-red-900\">Delete Project</button></div></div></div><!-- Project Form Container --><div id=\"project-form\" class=\"mt-6\"></div></div></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</p><p class=\"text-blue-700\"><span class=\"font-medium\">Last Updated:</span> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(project.UpdatedAt.Format("Jan 02, 2006"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 78, Col: 133}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</p></div></div><div class=\"bg-green-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-green-800 mb-2\">Quick Actions</h3><div class=\"space-y-2\"><button hx-delete=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var12 string
+			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 87, Col: 117}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" hx-confirm=\"Are you sure you want to delete this project?\" hx-target=\"body\" hx-redirect=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var13 string
+			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 90, Col: 91}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" class=\"text-red-700 hover:text-red-900\">Delete Project</button></div></div></div><!-- Project Form Container --><div id=\"project-form\" class=\"mt-6\"></div></div></div></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.AuthenticatedLayout(user, organizations, project.OrgID, projects).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.AuthenticatedLayout(user, organizations, project.OrgID, project.ID, projects).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

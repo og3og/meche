@@ -13,7 +13,14 @@ import (
 	"meche/pkg/models"
 )
 
-func AuthenticatedLayout(user goth.User, organizations []*models.Organization, currentOrgID string, projects []*models.Project) templ.Component {
+func getProjectClass(projectID, currentProjectID string) string {
+	if projectID == currentProjectID {
+		return "bg-blue-50 text-blue-700"
+	}
+	return "text-gray-900 hover:bg-gray-100"
+}
+
+func AuthenticatedLayout(user goth.User, organizations []*models.Organization, currentOrgID string, currentProjectID string, projects []*models.Project) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -78,7 +85,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 					var templ_7745c5c3_Var2 string
 					templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(org.ID)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 53, Col: 70}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 60, Col: 70}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 					if templ_7745c5c3_Err != nil {
@@ -91,7 +98,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 					var templ_7745c5c3_Var3 string
 					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(org.Name)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 53, Col: 92}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 60, Col: 92}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 					if templ_7745c5c3_Err != nil {
@@ -109,7 +116,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 					var templ_7745c5c3_Var4 string
 					templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(org.ID)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 55, Col: 70}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 62, Col: 70}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 					if templ_7745c5c3_Err != nil {
@@ -122,7 +129,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 					var templ_7745c5c3_Var5 string
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(org.Name)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 55, Col: 83}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 62, Col: 83}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
@@ -146,7 +153,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(user.AvatarURL)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 66, Col: 90}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 73, Col: 90}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -157,49 +164,84 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 			return templ_7745c5c3_Err
 		}
 		if currentOrgID != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<aside id=\"sidebar\" class=\"fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width\" aria-label=\"Sidebar\"><div class=\"relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200\"><div class=\"flex flex-col flex-1 pt-5 pb-4 overflow-y-auto\"><div class=\"flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200\"><ul class=\"pb-2 space-y-2\"><li><span class=\"text-sm font-semibold text-gray-500 uppercase\">Projects</span><ul class=\"mt-2 space-y-1\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<aside id=\"sidebar\" class=\"fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width\" aria-label=\"Sidebar\"><div class=\"relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200\"><div class=\"flex flex-col flex-1 pt-5 pb-4 overflow-y-auto\"><div class=\"flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200\"><ul class=\"pb-2 space-y-2\"><li><div class=\"flex justify-between items-center\"><span class=\"text-sm font-semibold text-gray-500 uppercase\">Projects</span> <button hx-get=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + currentOrgID + "/projects/new")
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 92, Col: 107}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" hx-target=\"#project-form\" hx-swap=\"innerHTML\" class=\"p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 4v16m8-8H4\"></path></svg></button></div><ul class=\"mt-2 space-y-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, project := range projects {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<li><a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var7 templ.SafeURL = templ.SafeURL("/organizations/" + project.OrgID + "/projects/" + project.ID)
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
+				var templ_7745c5c3_Var8 = []any{"flex items-center p-2 rounded-lg group " + getProjectClass(project.ID, currentProjectID)}
+				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var8...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\" class=\"flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group\"><span class=\"ml-3\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(project.Name)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 90, Col: 89}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+				var templ_7745c5c3_Var9 templ.SafeURL = templ.SafeURL("/organizations/" + project.OrgID + "/projects/" + project.ID)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var9)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</span></a></li>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\" class=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var10 string
+				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var8).String())
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 1, Col: 0}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\"><span class=\"ml-3\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var11 string
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(project.Name)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/layouts/authenticated_layout.templ`, Line: 109, Col: 89}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</span></a></li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</ul></li></ul></div></div></div></aside>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</ul></li></ul></div></div></div></aside>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<!-- Main Content -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "<!-- Main Content -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if currentOrgID != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<div class=\"p-4 sm:ml-64 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"p-4 sm:ml-64 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -207,12 +249,12 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "<div class=\"p-4 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"p-4 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -220,18 +262,18 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if currentOrgID != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<script>\n                    // Toggle sidebar\n                    document.getElementById('toggleSidebar').addEventListener('click', function() {\n                        document.getElementById('sidebar').classList.toggle('hidden');\n                    });\n                </script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<script>\n                    // Toggle sidebar\n                    document.getElementById('toggleSidebar').addEventListener('click', function() {\n                        document.getElementById('sidebar').classList.toggle('hidden');\n                    });\n                </script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
