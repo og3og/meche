@@ -241,7 +241,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 			return templ_7745c5c3_Err
 		}
 		if currentOrgID != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"p-4 sm:ml-64 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"p-4 sm:ml-32 pt-16\"><div class=\"rounded-lg mt-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -254,7 +254,7 @@ func AuthenticatedLayout(user goth.User, organizations []*models.Organization, c
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"p-4 pt-16\"><div class=\"p-4 rounded-lg mt-14\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"p-4 pt-16\"><div class=\"rounded-lg mt-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

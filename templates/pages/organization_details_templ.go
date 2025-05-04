@@ -47,7 +47,7 @@ func OrganizationDetails(user goth.User, organizations []*models.Organization, o
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-6\" aria-label=\"Tabs\"><button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-4\" aria-label=\"Tabs\"><button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -73,7 +73,7 @@ func OrganizationDetails(user goth.User, organizations []*models.Organization, o
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-6 mt-[5px] ml-[5px]\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-4 mt-[5px] ml-[5px]\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

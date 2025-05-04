@@ -48,7 +48,7 @@ func Dashboard(user goth.User, organizations []*models.Organization) templ.Compo
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-6 sm:px-6 lg:px-8\"><div class=\"px-4 py-6 sm:px-0\"><div class=\"bg-white shadow rounded-lg p-6\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">Welcome, ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg p-4\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">Welcome, ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

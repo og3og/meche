@@ -58,9 +58,9 @@ templ EditProjectForm(project *models.Project) {
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Edit Project</h3>
         <form 
             hx-put={ "/organizations/" + project.OrgID + "/projects/" + project.ID }
-            hx-target="#projects-list"
-            hx-swap="beforeend"
-            hx-on::after-request="this.reset(); document.getElementById('project-form').innerHTML = ''; htmx.trigger('body', 'project-created')"
+            hx-target="body"
+            hx-swap="none"
+            hx-on::after-request="this.reset(); document.getElementById('project-form').innerHTML = ''; htmx.trigger('body', 'project-updated')"
             class="space-y-4"
         >
             <div>

@@ -99,7 +99,7 @@ func EditProjectForm(project *models.Project) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"#projects-list\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset(); document.getElementById(&#39;project-form&#39;).innerHTML = &#39;&#39;; htmx.trigger(&#39;body&#39;, &#39;project-created&#39;)\" class=\"space-y-4\"><div><label for=\"name\" class=\"block text-sm font-medium text-gray-700\">Project Name</label> <input type=\"text\" id=\"name\" name=\"name\" required value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-target=\"body\" hx-swap=\"none\" hx-on::after-request=\"this.reset(); document.getElementById(&#39;project-form&#39;).innerHTML = &#39;&#39;; htmx.trigger(&#39;body&#39;, &#39;project-updated&#39;)\" class=\"space-y-4\"><div><label for=\"name\" class=\"block text-sm font-medium text-gray-700\">Project Name</label> <input type=\"text\" id=\"name\" name=\"name\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

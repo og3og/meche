@@ -121,14 +121,14 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
 
             <!-- Main Content -->
             if currentOrgID != "" {
-                <div class="p-4 sm:ml-64 pt-16">
-                    <div class="p-4 rounded-lg mt-14">
+                <div class="p-4 sm:ml-32 pt-16">
+                    <div class="rounded-lg mt-2">
                         { children... }
                     </div>
                 </div>
             } else {
                 <div class="p-4 pt-16">
-                    <div class="p-4 rounded-lg mt-14">
+                    <div class="rounded-lg mt-2">
                         { children... }
                     </div>
                 </div>

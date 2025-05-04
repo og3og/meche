@@ -120,6 +120,30 @@ func ShowProject(projectStorage storage.ProjectStorage, orgStorage storage.Organ
 	}
 }
 
+// ShowProjectOverview displays the project overview tab
+func ShowProjectOverview(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+		return pages.ProjectOverview(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// ShowProjectSettings displays the project settings tab
+func ShowProjectSettings(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
 // NewProjectForm renders the project creation form
 func NewProjectForm(c echo.Context) error {
 	orgID := c.Param("orgID")
