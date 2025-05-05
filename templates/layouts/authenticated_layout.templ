@@ -50,11 +50,7 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                                         onchange="if(this.value === 'dashboard') { window.location.href = '/dashboard'; } else { window.location.href = '/organizations/' + this.value; }"
                                     >
-                                        if currentOrgID == "" {
-                                            <option value="dashboard" selected>Dashboard</option>
-                                        } else {
-                                            <option value="dashboard">Dashboard</option>
-                                        }
+                                        <option value="dashboard">Dashboard</option>
                                         for _, org := range organizations {
                                             if org.ID == currentOrgID {
                                                 <option value={ org.ID } selected>{ org.Name }</option>
@@ -80,7 +76,7 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
 
             <!-- Sidebar - Only shown when an organization is selected -->
             if currentOrgID != "" {
-                <aside id="sidebar" class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
+                <aside id="sidebar" class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 w-64 h-full pt-16 font-normal transition-all duration-300 ease-in-out transform lg:flex" aria-label="Sidebar">
                     <div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200">
                         <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
                             <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200">
@@ -121,7 +117,7 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
 
             <!-- Main Content -->
             if currentOrgID != "" {
-                <div class="p-4 sm:ml-32 pt-16">
+                <div id="main-content" class="p-4 sm:ml-64 pt-16 transition-all duration-300 ease-in-out">
                     <div class="rounded-lg mt-2">
                         { children... }
                     </div>
@@ -136,9 +132,22 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
 
             if currentOrgID != "" {
                 <script>
-                    // Toggle sidebar
+                    // Toggle sidebar with animation
                     document.getElementById('toggleSidebar').addEventListener('click', function() {
-                        document.getElementById('sidebar').classList.toggle('hidden');
+                        const sidebar = document.getElementById('sidebar');
+                        const mainContent = document.getElementById('main-content');
+                        
+                        if (sidebar.classList.contains('-translate-x-full')) {
+                            // Opening animation
+                            sidebar.classList.remove('-translate-x-full');
+                            mainContent.classList.remove('sm:ml-0');
+                            mainContent.classList.add('sm:ml-64');
+                        } else {
+                            // Closing animation
+                            sidebar.classList.add('-translate-x-full');
+                            mainContent.classList.remove('sm:ml-64');
+                            mainContent.classList.add('sm:ml-0');
+                        }
                     });
                 </script>
             }

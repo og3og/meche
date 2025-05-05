@@ -11,7 +11,7 @@ templ ProjectDetails(user goth.User, organizations []*models.Organization, proje
         <div class="min-h-screen bg-gray-50">
             <div class="max-w-7xl mx-auto py-1 sm:px-1 lg:px-1">
                 <div class="px-1 py-1 sm:px-0">
-                    <div class="bg-white shadow rounded-lg">
+                    <div class="bg-white shadow rounded-lg" id="project-form">
                         <!-- Tabs -->
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-8 px-4" aria-label="Tabs">
@@ -19,6 +19,8 @@ templ ProjectDetails(user goth.User, organizations []*models.Organization, proje
                                     hx-get={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/overview" }
                                     hx-target="#tab-content"
                                     hx-swap="innerHTML"
+                                    data-tab="overview"
+                                    hx-on:click="switchTab('overview')"
                                     class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                 >
                                     Overview
@@ -27,6 +29,8 @@ templ ProjectDetails(user goth.User, organizations []*models.Organization, proje
                                     hx-get={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/tasks" }
                                     hx-target="#tab-content"
                                     hx-swap="innerHTML"
+                                    data-tab="tasks"
+                                    hx-on:click="switchTab('tasks')"
                                     class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                 >
                                     Tasks
@@ -35,6 +39,8 @@ templ ProjectDetails(user goth.User, organizations []*models.Organization, proje
                                     hx-get={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/settings" }
                                     hx-target="#tab-content"
                                     hx-swap="innerHTML"
+                                    data-tab="settings"
+                                    hx-on:click="switchTab('settings')"
                                     class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                 >
                                     Settings
@@ -54,5 +60,22 @@ templ ProjectDetails(user goth.User, organizations []*models.Organization, proje
                 </div>
             </div>
         </div>
+        <script>
+            function switchTab(activeTab) {
+                // Get all tab buttons
+                const tabs = document.querySelectorAll('button[data-tab]');
+                
+                // Update each tab's classes
+                tabs.forEach(tab => {
+                    if (tab.dataset.tab === activeTab) {
+                        tab.classList.add('border-indigo-500', 'text-indigo-600');
+                        tab.classList.remove('border-transparent', 'text-gray-500');
+                    } else {
+                        tab.classList.add('border-transparent', 'text-gray-500');
+                        tab.classList.remove('border-indigo-500', 'text-indigo-600');
+                    }
+                });
+            }
+        </script>
     }
 } 

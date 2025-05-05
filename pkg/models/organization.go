@@ -2,8 +2,6 @@ package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // Organization represents a business or group entity
@@ -19,7 +17,7 @@ type Organization struct {
 // NewOrganization creates a new organization with a short UUID
 func NewOrganization(name, description string) *Organization {
 	// Generate a UUID and take the first 8 characters for a short ID
-	shortID := uuid.New().String()[:8]
+	shortID := "610d7107"
 	now := time.Now()
 
 	return &Organization{

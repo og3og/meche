@@ -211,3 +211,52 @@ func ShowOrganization(orgStorage storage.OrganizationStorage, projectStorage sto
 		return pages.OrganizationDetails(user, organizations, org, projects).Render(c.Request().Context(), c.Response().Writer)
 	}
 }
+
+// ShowOrganizationOverview displays the organization overview tab
+func ShowOrganizationOverview(orgStorage storage.OrganizationStorage, projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		org, err := orgStorage.GetOrganization(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Organization not found")
+		}
+
+		// Get the current user from the session
+		user, ok := c.Get("user").(goth.User)
+		if !ok {
+			return c.String(http.StatusUnauthorized, "User not authenticated")
+		}
+
+		// Get all organizations for the user
+		organizations, err := orgStorage.ListOrganizations()
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch organizations")
+		}
+
+		// Get all projects for the organization and sort them alphabetically
+		projects, err := projectStorage.ListProjects(org.ID)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch projects")
+		}
+
+		// Sort projects alphabetically by name
+		sort.Slice(projects, func(i, j int) bool {
+			return strings.ToLower(projects[i].Name) < strings.ToLower(projects[j].Name)
+		})
+
+		return pages.OrganizationOverview(user, organizations, org, projects).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// ShowOrganizationSettings displays the organization settings tab
+func ShowOrganizationSettings(orgStorage storage.OrganizationStorage, projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		org, err := orgStorage.GetOrganization(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Organization not found")
+		}
+
+		return pages.OrganizationSettingsForm(org).Render(c.Request().Context(), c.Response().Writer)
+	}
+}

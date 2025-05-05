@@ -47,111 +47,41 @@ func OrganizationDetails(user goth.User, organizations []*models.Organization, o
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-4\" aria-label=\"Tabs\"><button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg\" id=\"project-form\"><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-4\" aria-label=\"Tabs\"><button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + org.ID + "/overview")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 19, Col: 85}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 18, Col: 85}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Overview</button> <button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" hx-trigger=\"click\" hx-on:click=\"this.classList.add(&#39;border-indigo-500&#39;, &#39;text-indigo-600&#39;); this.classList.remove(&#39;border-transparent&#39;, &#39;text-gray-500&#39;); document.querySelector(&#39;button[data-tab=settings]&#39;).classList.add(&#39;border-transparent&#39;, &#39;text-gray-500&#39;); document.querySelector(&#39;button[data-tab=settings]&#39;).classList.remove(&#39;border-indigo-500&#39;, &#39;text-indigo-600&#39;)\" class=\"border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\" data-tab=\"overview\">Overview</button> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + org.ID + "/settings")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 27, Col: 85}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 29, Col: 85}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-4 mt-[5px] ml-[5px]\"><div class=\"flex justify-between items-start mb-6\"><div><h1 class=\"text-2xl font-bold text-gray-900\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" hx-trigger=\"click\" hx-on:click=\"this.classList.add(&#39;border-indigo-500&#39;, &#39;text-indigo-600&#39;); this.classList.remove(&#39;border-transparent&#39;, &#39;text-gray-500&#39;); document.querySelector(&#39;button[data-tab=overview]&#39;).classList.add(&#39;border-transparent&#39;, &#39;text-gray-500&#39;); document.querySelector(&#39;button[data-tab=overview]&#39;).classList.remove(&#39;border-indigo-500&#39;, &#39;text-indigo-600&#39;)\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\" data-tab=\"settings\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-4 mt-[5px] ml-[5px]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(org.Name)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 41, Col: 91}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			templ_7745c5c3_Err = OrganizationOverview(user, organizations, org, projects).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</h1><p class=\"text-gray-600 mt-1\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(org.Description)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 42, Col: 83}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</p></div><div class=\"flex space-x-2\"><button hx-get=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + org.ID + "/edit")
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 46, Col: 85}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" hx-target=\"#organization-form\" hx-swap=\"innerHTML\" class=\"px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600\">Edit Organization</button></div></div><div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\"><div class=\"bg-blue-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-blue-800 mb-2\">Organization Details</h3><div class=\"space-y-2\"><p class=\"text-blue-700\"><span class=\"font-medium\">Created:</span> ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(org.CreatedAt.Format("Jan 02, 2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 61, Col: 124}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</p><p class=\"text-blue-700\"><span class=\"font-medium\">Last Updated:</span> ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(org.UpdatedAt.Format("Jan 02, 2006"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 64, Col: 129}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</p></div></div><div class=\"bg-green-50 p-6 rounded-lg\"><h3 class=\"text-lg font-semibold text-green-800 mb-2\">Quick Actions</h3><div class=\"space-y-2\"><button hx-get=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + org.ID + "/projects/new")
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/organization_details.templ`, Line: 73, Col: 97}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" hx-target=\"#project-form\" hx-swap=\"innerHTML\" class=\"text-green-700 hover:text-green-900\">Create New Project</button></div></div></div><!-- Project Form Container --><div id=\"project-form\" class=\"mt-6\"></div></div></div></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div></div></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

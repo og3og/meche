@@ -47,7 +47,7 @@ func ProjectDetails(user goth.User, organizations []*models.Organization, projec
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-4\" aria-label=\"Tabs\"><button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"min-h-screen bg-gray-50\"><div class=\"max-w-7xl mx-auto py-1 sm:px-1 lg:px-1\"><div class=\"px-1 py-1 sm:px-0\"><div class=\"bg-white shadow rounded-lg\" id=\"project-form\"><!-- Tabs --><div class=\"border-b border-gray-200\"><nav class=\"-mb-px flex space-x-8 px-4\" aria-label=\"Tabs\"><button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -60,46 +60,46 @@ func ProjectDetails(user goth.User, organizations []*models.Organization, projec
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Overview</button> <button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" data-tab=\"overview\" hx-on:click=\"switchTab(&#39;overview&#39;)\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Overview</button> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/tasks")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 27, Col: 117}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 29, Col: 117}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Tasks</button> <button hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" data-tab=\"tasks\" hx-on:click=\"switchTab(&#39;tasks&#39;)\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Tasks</button> <button hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/settings")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 35, Col: 120}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 39, Col: 120}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-4 mt-[5px] ml-[5px]\" hx-get=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-target=\"#tab-content\" hx-swap=\"innerHTML\" data-tab=\"settings\" hx-on:click=\"switchTab(&#39;settings&#39;)\" class=\"border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm\">Settings</button></nav></div><!-- Tab Content --><div id=\"tab-content\" class=\"p-4 mt-[5px] ml-[5px]\" hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("/organizations/" + project.OrgID + "/projects/" + project.ID + "/overview")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 48, Col: 112}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templates/pages/project_details.templ`, Line: 54, Col: 112}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-trigger=\"load\" hx-swap=\"innerHTML\"></div></div></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-trigger=\"load\" hx-swap=\"innerHTML\"></div></div></div></div></div><script>\n            function switchTab(activeTab) {\n                // Get all tab buttons\n                const tabs = document.querySelectorAll('button[data-tab]');\n                \n                // Update each tab's classes\n                tabs.forEach(tab => {\n                    if (tab.dataset.tab === activeTab) {\n                        tab.classList.add('border-indigo-500', 'text-indigo-600');\n                        tab.classList.remove('border-transparent', 'text-gray-500');\n                    } else {\n                        tab.classList.add('border-transparent', 'text-gray-500');\n                        tab.classList.remove('border-indigo-500', 'text-indigo-600');\n                    }\n                });\n            }\n        </script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

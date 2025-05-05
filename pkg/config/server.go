@@ -59,6 +59,9 @@ func NewServer() *echo.Echo {
 	memberStorage := memory.NewMemoryOrganizationMemberStorage()
 	projectStorage := memory.NewMemoryProjectStorage()
 
+	// Initialize seed data
+	memory.SeedData(orgStorage, projectStorage)
+
 	// Serve static files
 	e.Static("/static", "static")
 
@@ -121,11 +124,13 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 	protected.GET("/organizations/:id/edit", orgHandlers.EditOrganizationForm(orgStorage))
 	protected.PUT("/organizations/:id", orgHandlers.UpdateOrganization(orgStorage))
 	protected.GET("/organizations/:id", orgHandlers.ShowOrganization(orgStorage, projectStorage))
+	protected.GET("/organizations/:id/overview", orgHandlers.ShowOrganizationOverview(orgStorage, projectStorage))
+	protected.GET("/organizations/:id/settings", orgHandlers.ShowOrganizationSettings(orgStorage, projectStorage))
 
 	// Project routes
 	protected.POST("/organizations/:orgID/projects", orgHandlers.CreateProject(projectStorage))
 	protected.GET("/organizations/:orgID/projects", orgHandlers.ListProjects(projectStorage))
-	protected.GET("/organizations/:orgID/projects/new", orgHandlers.NewProjectForm)
+	protected.GET("/organizations/:orgID/projects/new", orgHandlers.NewProjectForm(orgStorage, projectStorage))
 	protected.GET("/organizations/:orgID/projects/cancel", orgHandlers.CancelProjectForm)
 	protected.GET("/organizations/:orgID/projects/:id", orgHandlers.ShowProject(projectStorage, orgStorage))
 	protected.GET("/organizations/:orgID/projects/:id/overview", orgHandlers.ShowProjectOverview(projectStorage))

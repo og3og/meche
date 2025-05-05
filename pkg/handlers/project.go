@@ -144,10 +144,31 @@ func ShowProjectSettings(projectStorage storage.ProjectStorage) echo.HandlerFunc
 	}
 }
 
-// NewProjectForm renders the project creation form
-func NewProjectForm(c echo.Context) error {
-	orgID := c.Param("orgID")
-	return pages.ProjectForm(orgID).Render(c.Request().Context(), c.Response().Writer)
+// NewProjectForm renders the project creation page
+func NewProjectForm(orgStorage storage.OrganizationStorage, projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		orgID := c.Param("orgID")
+
+		// Get the current user from the session
+		user, ok := c.Get("user").(goth.User)
+		if !ok {
+			return c.String(http.StatusUnauthorized, "User not authenticated")
+		}
+
+		// Get all organizations for the user
+		organizations, err := orgStorage.ListOrganizations()
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch organizations")
+		}
+
+		// Get all projects for the current organization
+		projects, err := projectStorage.ListProjects(orgID)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to fetch projects")
+		}
+
+		return pages.ProjectNew(user, organizations, orgID, projects).Render(c.Request().Context(), c.Response().Writer)
+	}
 }
 
 // CancelProjectForm clears the project form
