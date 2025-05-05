@@ -138,4 +138,8 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 	protected.GET("/organizations/:orgID/projects/:id/edit", orgHandlers.EditProjectForm(projectStorage))
 	protected.PUT("/organizations/:orgID/projects/:id", orgHandlers.UpdateProject(projectStorage))
 	protected.DELETE("/organizations/:orgID/projects/:id", orgHandlers.DeleteProject(projectStorage))
+	protected.POST("/organizations/:orgID/projects/:id/pin", orgHandlers.PinProject(projectStorage))
+	protected.POST("/organizations/:orgID/projects/:id/unpin", orgHandlers.UnpinProject(projectStorage))
+	protected.POST("/organizations/:orgID/projects/:id/archive", orgHandlers.ArchiveProject(projectStorage))
+	protected.POST("/organizations/:orgID/projects/:id/unarchive", orgHandlers.UnarchiveProject(projectStorage))
 }

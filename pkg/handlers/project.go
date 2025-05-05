@@ -241,3 +241,77 @@ func DeleteProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 		return c.Redirect(http.StatusSeeOther, "/organizations/"+orgID)
 	}
 }
+
+// PinProject handles pinning a project
+func PinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+
+		project.Pin()
+		if err := projectStorage.UpdateProject(project); err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to pin project")
+		}
+
+		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// UnpinProject handles unpinning a project
+func UnpinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+
+		project.Unpin()
+		if err := projectStorage.UpdateProject(project); err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to unpin project")
+		}
+
+		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// ArchiveProject handles archiving a project
+func ArchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+
+		project.Archive()
+		if err := projectStorage.UpdateProject(project); err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to archive project")
+		}
+
+		// Return the updated project actions section
+		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// UnarchiveProject handles unarchiving a project
+func UnarchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		project, err := projectStorage.GetProject(id)
+		if err != nil {
+			return c.String(http.StatusNotFound, "Project not found")
+		}
+
+		project.Unarchive()
+		if err := projectStorage.UpdateProject(project); err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to unarchive project")
+		}
+
+		// Return the updated project actions section
+		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+	}
+}
