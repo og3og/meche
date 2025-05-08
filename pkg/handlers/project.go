@@ -292,8 +292,7 @@ func ArchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 			return c.String(http.StatusInternalServerError, "Failed to archive project")
 		}
 
-		// Return the updated project actions section
-		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+		return c.NoContent(http.StatusOK)
 	}
 }
 
@@ -311,7 +310,6 @@ func UnarchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 			return c.String(http.StatusInternalServerError, "Failed to unarchive project")
 		}
 
-		// Return the updated project actions section
-		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
+		return c.NoContent(http.StatusOK)
 	}
 }

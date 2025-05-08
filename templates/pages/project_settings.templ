@@ -12,31 +12,35 @@ templ ProjectSettings(project *models.Project) {
         <div class="flex space-x-4">
             if project.PinnedAt == nil {
             <button hx-post={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/pin" }
-            hx-target="#project-settings"
-                hx-swap="innerHTML"
-                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                hx-on::before-request="this.disabled = true"
+                hx-on::after-request="window.location.reload()"
+                hx-swap="none"
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
                 Pin Project
             </button>
             } else {
             <button hx-post={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/unpin" }
-            hx-target="#project-settings"
-                hx-swap="innerHTML"
-                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                hx-on::before-request="this.disabled = true"
+                hx-on::after-request="window.location.reload()"
+                hx-swap="none"
+                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
                 Unpin Project
             </button>
             }
             if project.ArchivedAt == nil {
             <button hx-post={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/archive" }
-                hx-target="#project-settings"
-                hx-swap="innerHTML"
-                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+                hx-on::before-request="this.disabled = true"
+                hx-on::after-request="window.location.reload()"
+                hx-swap="none"
+                class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed">
                 Archive Project
             </button>
             } else {
             <button hx-post={ "/organizations/" + project.OrgID + "/projects/" + project.ID + "/unarchive" }
-                hx-target="#project-settings"
-                hx-swap="innerHTML"
-                class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                hx-on::before-request="this.disabled = true"
+                hx-on::after-request="window.location.reload()"
+                hx-swap="none"
+                class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed">
                 Unarchive Project
             </button>
             }
