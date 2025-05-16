@@ -84,13 +84,27 @@ func ListProjects(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	}
 }
 
+// validateProjectAccess checks if the project belongs to the specified organization
+func validateProjectAccess(projectStorage storage.ProjectStorage, projectID, orgID string) (*models.Project, error) {
+	project, err := projectStorage.GetProject(projectID)
+	if err != nil {
+		return nil, err
+	}
+	if project.OrgID != orgID {
+		return nil, echo.NewHTTPError(http.StatusForbidden, "Project does not belong to this organization")
+	}
+	return project, nil
+}
+
 // ShowProject displays the details of a specific project
 func ShowProject(projectStorage storage.ProjectStorage, orgStorage storage.OrganizationStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		// Get the current user from the session
@@ -124,9 +138,11 @@ func ShowProject(projectStorage storage.ProjectStorage, orgStorage storage.Organ
 func ShowProjectOverview(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 		return pages.ProjectOverview(project).Render(c.Request().Context(), c.Response().Writer)
 	}
@@ -136,9 +152,11 @@ func ShowProjectOverview(projectStorage storage.ProjectStorage) echo.HandlerFunc
 func ShowProjectSettings(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 		return pages.ProjectSettings(project).Render(c.Request().Context(), c.Response().Writer)
 	}
@@ -180,9 +198,11 @@ func CancelProjectForm(c echo.Context) error {
 func EditProjectForm(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 		return pages.EditProjectForm(project).Render(c.Request().Context(), c.Response().Writer)
 	}
@@ -192,9 +212,11 @@ func EditProjectForm(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 func UpdateProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		var req ProjectRequest
@@ -233,6 +255,11 @@ func DeleteProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 		id := c.Param("id")
 		orgID := c.Param("orgID")
 
+		_, err := validateProjectAccess(projectStorage, id, orgID)
+		if err != nil {
+			return err
+		}
+
 		if err := projectStorage.DeleteProject(id); err != nil {
 			return c.String(http.StatusInternalServerError, "Failed to delete project")
 		}
@@ -246,9 +273,11 @@ func DeleteProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 func PinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		project.Pin()
@@ -264,9 +293,11 @@ func PinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 func UnpinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		project.Unpin()
@@ -282,9 +313,11 @@ func UnpinProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 func ArchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		project.Archive()
@@ -300,9 +333,11 @@ func ArchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 func UnarchiveProject(projectStorage storage.ProjectStorage) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
-		project, err := projectStorage.GetProject(id)
+		orgID := c.Param("orgID")
+
+		project, err := validateProjectAccess(projectStorage, id, orgID)
 		if err != nil {
-			return c.String(http.StatusNotFound, "Project not found")
+			return err
 		}
 
 		project.Unarchive()

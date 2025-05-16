@@ -58,6 +58,7 @@ func NewServer() *echo.Echo {
 	orgStorage := memory.NewMemoryOrganizationStorage()
 	memberStorage := memory.NewMemoryOrganizationMemberStorage()
 	projectStorage := memory.NewMemoryProjectStorage()
+	taskStorage := memory.NewMemoryTaskStorage()
 
 	// Initialize seed data
 	memory.SeedData(orgStorage, projectStorage)
@@ -66,7 +67,7 @@ func NewServer() *echo.Echo {
 	e.Static("/static", "static")
 
 	// Setup routes
-	setupRoutes(e, orgStorage, memberStorage, projectStorage)
+	setupRoutes(e, orgStorage, memberStorage, projectStorage, taskStorage)
 
 	return e
 }
@@ -79,7 +80,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 
 // setupRoutes configures all routes for the application
-func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberStorage storage.OrganizationMemberStorage, projectStorage storage.ProjectStorage) {
+func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberStorage storage.OrganizationMemberStorage, projectStorage storage.ProjectStorage, taskStorage storage.TaskStorage) {
 	// Auth routes
 	e.GET("/", handlers.HandleHome)
 	e.GET("/login", handlers.HandleLogin)
@@ -106,6 +107,7 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 			c.Set("organization_storage", orgStorage)
 			c.Set("member_storage", memberStorage)
 			c.Set("project_storage", projectStorage)
+			c.Set("task_storage", taskStorage)
 			c.Set("user", user)
 
 			return next(c)
@@ -142,4 +144,19 @@ func setupRoutes(e *echo.Echo, orgStorage storage.OrganizationStorage, memberSto
 	protected.POST("/organizations/:orgID/projects/:id/unpin", orgHandlers.UnpinProject(projectStorage))
 	protected.POST("/organizations/:orgID/projects/:id/archive", orgHandlers.ArchiveProject(projectStorage))
 	protected.POST("/organizations/:orgID/projects/:id/unarchive", orgHandlers.UnarchiveProject(projectStorage))
+
+	// Task routes
+	protected.POST("/organizations/:orgID/projects/:projectID/tasks", orgHandlers.CreateTask(taskStorage))
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks", orgHandlers.ListTasks(taskStorage))
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks/archived", orgHandlers.ListArchivedTasks(taskStorage))
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks/new", orgHandlers.NewTaskForm)
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks/cancel", orgHandlers.CancelTaskForm)
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks/:id", orgHandlers.ShowTask(taskStorage))
+	protected.GET("/organizations/:orgID/projects/:projectID/tasks/:id/edit", orgHandlers.EditTaskForm(taskStorage))
+	protected.PUT("/organizations/:orgID/projects/:projectID/tasks/:id", orgHandlers.UpdateTask(taskStorage))
+	protected.DELETE("/organizations/:orgID/projects/:projectID/tasks/:id", orgHandlers.DeleteTask(taskStorage))
+	protected.POST("/organizations/:orgID/projects/:projectID/tasks/:id/pin", orgHandlers.PinTask(taskStorage))
+	protected.POST("/organizations/:orgID/projects/:projectID/tasks/:id/unpin", orgHandlers.UnpinTask(taskStorage))
+	protected.POST("/organizations/:orgID/projects/:projectID/tasks/:id/archive", orgHandlers.ArchiveTask(taskStorage))
+	protected.POST("/organizations/:orgID/projects/:projectID/tasks/:id/unarchive", orgHandlers.UnarchiveTask(taskStorage))
 }

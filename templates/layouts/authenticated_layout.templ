@@ -19,8 +19,34 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
             <meta charset="UTF-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <title>Meche</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
             <script src="https://unpkg.com/htmx.org@1.9.10"></script>
             <script src="https://cdn.tailwindcss.com"></script>
+            <script>
+                tailwind.config = {
+                        theme: {
+                            extend: {
+                                fontFamily: {
+                                    sans: ['DM Sans', 'system-ui', 'sans-serif'],
+                                    display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+                                },
+                            },
+                        },
+                    }
+            </script>
+            <style>
+                
+                h1, h2, h3, h4, h5, h6 {
+                    font-family: 'Space Grotesk', system-ui, sans-serif;
+                }
+                body {
+                    font-family: 'DM Sans', system-ui, sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+            </style>
         </head>
         <body class="bg-gray-50">
             <!-- Top Navigation -->
@@ -46,19 +72,102 @@ templ AuthenticatedLayout(user goth.User, organizations []*models.Organization, 
                                         Create Organization
                                     </button>
                                 } else {
-                                    <select 
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                                        onchange="if(this.value === 'dashboard') { window.location.href = '/dashboard'; } else { window.location.href = '/organizations/' + this.value; }"
-                                    >
-                                        <option value="dashboard">Dashboard</option>
-                                        for _, org := range organizations {
-                                            if org.ID == currentOrgID {
-                                                <option value={ org.ID } selected>{ org.Name }</option>
+                                    <div class="relative">
+                                        <button 
+                                            type="button"
+                                            onclick="toggleOrgDropdown()"
+                                            class="flex items-center justify-between w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 pr-8 cursor-pointer hover:bg-gray-50 transition-all duration-200 shadow-sm"
+                                        >
+                                            <span id="selectedOrgName">
+                                                if currentOrgID == "" {
+                                                    Dashboard
+                                                } else {
+                                                    for _, org := range organizations {
+                                                        if org.ID == currentOrgID {
+                                                            { org.Name }
+                                                        }
+                                                    }
+                                                }
+                                            </span>
+                                            <svg class="w-4 h-4 transition-transform duration-200" id="dropdownArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </button>
+                                        <div id="orgDropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+                                            <div class="py-1">
+                                                <button 
+                                                    onclick="selectOrganization('dashboard')"
+                                                    class="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center"
+                                                >
+                                                    <span class="flex-1">Dashboard</span>
+                                                    if currentOrgID == "" {
+                                                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                    }
+                                                </button>
+                                                for _, org := range organizations {
+                                                    <button 
+                                                        data-org-id={ org.ID }
+                                                        class="org-select-btn w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-150 flex items-center"
+                                                    >
+                                                        <span class="flex-1">{ org.Name }</span>
+                                                        if org.ID == currentOrgID {
+                                                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                            </svg>
+                                                        }
+                                                    </button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        function toggleOrgDropdown() {
+                                            const dropdown = document.getElementById('orgDropdown');
+                                            const arrow = document.getElementById('dropdownArrow');
+                                            dropdown.classList.toggle('hidden');
+                                            arrow.classList.toggle('rotate-180');
+                                        }
+
+                                        function selectOrganization(orgId) {
+                                            const dropdown = document.getElementById('orgDropdown');
+                                            const arrow = document.getElementById('dropdownArrow');
+                                            const selectedName = document.getElementById('selectedOrgName');
+                                            
+                                            dropdown.classList.add('hidden');
+                                            arrow.classList.remove('rotate-180');
+                                            
+                                            if (orgId === 'dashboard') {
+                                                selectedName.textContent = 'Dashboard';
+                                                window.location.href = '/dashboard';
                                             } else {
-                                                <option value={ org.ID }>{ org.Name }</option>
+                                                const selectedOrg = document.querySelector(`[data-org-id="${orgId}"] span`);
+                                                selectedName.textContent = selectedOrg.textContent;
+                                                window.location.href = '/organizations/' + orgId;
                                             }
                                         }
-                                    </select>
+
+                                        // Add click handlers to organization buttons
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            document.querySelectorAll('.org-select-btn').forEach(button => {
+                                                button.addEventListener('click', function() {
+                                                    const orgId = this.getAttribute('data-org-id');
+                                                    selectOrganization(orgId);
+                                                });
+                                            });
+                                        });
+
+                                        // Close dropdown when clicking outside
+                                        document.addEventListener('click', function(event) {
+                                            const dropdown = document.getElementById('orgDropdown');
+                                            const button = event.target.closest('button');
+                                            if (!button || !button.closest('.relative')) {
+                                                dropdown.classList.add('hidden');
+                                                document.getElementById('dropdownArrow').classList.remove('rotate-180');
+                                            }
+                                        });
+                                    </script>
                                 }
                             </div>
                         </div>
